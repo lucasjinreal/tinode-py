@@ -78,6 +78,7 @@ class ElvesChatter(object):
         print('=> init client will send an iterator to MessageLoop')
         self.stream = self.stub.MessageLoop(self.msg_iter())
         self.client_post(self.hello())
+        self.login()
         # self.client_post(subscribe('me'))
 
     # ---------------- initial work -------------------
