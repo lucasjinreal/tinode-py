@@ -24,7 +24,7 @@ from elves import ElvesChatter
 
 def main():
     elves = ElvesChatter(server_address='localhost:6061')
-    elves.connect()
+    elves.connect(listen='0.0.0.0:40051')
     elves.login(user_name='jintian', password='123456')
     elves.on_message()
 

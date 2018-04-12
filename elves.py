@@ -59,16 +59,17 @@ class ElvesChatter(object):
         return str(self.mid)
 
     # ---------------- initial work -------------------
-    def connect(self):
-        self.init_server()
+    def connect(self, listen):
+        self.init_server(listen)
         print('=> server initialized.')
         self.init_client()
         print('=> client initialized.')
 
-    def init_server(self):
+    def init_server(self, listen):
         self.server = grpc.server(futures.ThreadPoolExecutor(max_workers=16))
         pbx.add_PluginServicer_to_server(Plugin(), self.server)
-        self.server.add_insecure_port(self.server_address)
+        # I don't know what this listen doing?
+        self.server.add_insecure_port(listen)
         self.server.start()
 
     def init_client(self):
@@ -78,7 +79,6 @@ class ElvesChatter(object):
         print('=> init client will send an iterator to MessageLoop')
         self.stream = self.stub.MessageLoop(self.msg_iter())
         self.client_post(self.hello())
-        self.login()
         # self.client_post(subscribe('me'))
 
     # ---------------- initial work -------------------
@@ -86,7 +86,7 @@ class ElvesChatter(object):
     def msg_iter(self):
         while True:
             msg = self.queue_out.get()
-            print('-- get one msg out from queue: ', msg)
+            # print('-- get one msg out from queue: ', msg)
             if msg is None:
                 return
             yield msg
@@ -128,7 +128,7 @@ class ElvesChatter(object):
                             del onCompletion[msg.ctrl.id]
                             if 200 <= msg.ctrl.code < 400:
                                 func(msg.ctrl.params)
-                        print('got situation: ' + str(msg.ctrl.code) + " " + msg.ctrl.text)
+                        # print('got situation: ' + str(msg.ctrl.code) + " " + msg.ctrl.text)
                     elif msg.HasField("data"):
                         in_msg = msg.data.content.decode('utf-8')
                         print("收到消息: " + in_msg)
