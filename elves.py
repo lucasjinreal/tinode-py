@@ -121,6 +121,7 @@ class ElvesChatter(object):
                 print('raw message: ', self.stream)
 
                 for msg in self.stream:
+                    print('in: ', msg)
                     if msg.HasField("ctrl"):
                         # Run code on command completion
                         func = onCompletion.get(msg.ctrl.id)
